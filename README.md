@@ -1,3 +1,11 @@
 # TobySpringFramework
 
 ## 토비 스프링 프레임워크 3.1 책을 보며 예제 실습을 하기 위한 저장 공간
+
+###개발 환경:
+Window OS: 8.1
+jdk: 1.8.0_25
+jre: 1.8.0_151
+mySQL: 5.1.45
+Spring Framework: 3.2.18.RELEASE
+Develop Tool: Eclipse, mySQL workbench
