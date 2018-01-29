@@ -11,8 +11,8 @@ public class User {
 		this.password = password;
 	}
 	
-	public User(){
-		
+	public User() {
+
 	}
 
 	public String getId() {
