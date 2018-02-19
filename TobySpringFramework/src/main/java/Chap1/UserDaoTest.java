@@ -18,17 +18,14 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
+	@Autowired
 	private UserDao dao;
 	private User user1;
 	private User user2;
 	private User user3;
-	@Autowired
-	private ApplicationContext context;
 
 	@Before
 	public void setUp() {
-		this.dao = this.context.getBean("userDao", UserDao.class);
-
 		this.user1 = new User("gyumee", "박성철", "springno1");
 		this.user2 = new User("leegw700", "이길원", "springno2");
 		this.user3 = new User("bumjin", "박범진", "springno3");
