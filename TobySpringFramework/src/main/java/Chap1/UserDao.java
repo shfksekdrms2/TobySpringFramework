@@ -9,17 +9,14 @@ import javax.sql.DataSource;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-
 public class UserDao {
 	private DataSource dataSource;
-	private Connection c;
 	private User user;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-
+	
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -103,14 +100,14 @@ public class UserDao {
 
 		return this.user;
 	}
-
-	public void deleteAll() throws SQLException {
+	
+	public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException{
 		Connection c = null;
 		PreparedStatement ps = null;
 
 		try {
 			c = dataSource.getConnection();
-			ps = c.prepareStatement("delete from users");
+			ps = stmt.makePreparedStatement(c);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw e;
@@ -130,6 +127,11 @@ public class UserDao {
 				}
 			}
 		}
+	}
+
+	public void deleteAll() throws SQLException {
+		StatementStrategy st = new DeleteAllStatement();
+		jdbcContextWithStatementStrategy(st);
 	}
 
 	public int getCount() throws SQLException {
