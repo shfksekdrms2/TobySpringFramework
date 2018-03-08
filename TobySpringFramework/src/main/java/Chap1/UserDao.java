@@ -88,7 +88,6 @@ public class UserDao {
 		return this.user;
 	}
 
-
 	public void deleteAll() throws SQLException {
 		this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
 			@Override
