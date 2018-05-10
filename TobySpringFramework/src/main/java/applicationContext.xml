@@ -12,7 +12,7 @@
 		<property name="password" value="manager" />
 	</bean>
 
-	<bean id="userDao" class="Chap1.UserDao">
+	<bean id="userDao" class="Chap1.UserDaoJdbc">
 		<!-- <property name="connectionMaker" ref="connectionMaker" /> -->
 		<property name="dataSource" ref="dataSource" />
 	</bean>
