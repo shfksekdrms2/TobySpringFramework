@@ -67,9 +67,4 @@ public class UserServiceTest {
 		assertThat(userWithLevel.getLevel(), is(userWithLevel.getLevel()));
 		assertThat(userWithoutLevel.getLevel(), is(userWithoutLevel.getLevel()));
 	}
-
-	@Test
-	public void bean() {
-		assertThat(this.userService, is(notNullValue()));
-	}
 }
