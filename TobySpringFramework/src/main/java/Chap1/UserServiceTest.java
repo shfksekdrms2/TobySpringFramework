@@ -54,6 +54,21 @@ public class UserServiceTest {
 	}
 
 	@Test
+	public void add() {
+		userDao.deleteAll();
+
+		User userWithLevel = users.get(4);
+		User userWithoutLevel = users.get(0);
+		userWithoutLevel.setLevel(null);
+
+		userService.add(userWithLevel);
+		userService.add(userWithoutLevel);
+
+		assertThat(userWithLevel.getLevel(), is(userWithLevel.getLevel()));
+		assertThat(userWithoutLevel.getLevel(), is(userWithoutLevel.getLevel()));
+	}
+
+	@Test
 	public void bean() {
 		assertThat(this.userService, is(notNullValue()));
 	}
