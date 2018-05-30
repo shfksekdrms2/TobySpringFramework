@@ -24,14 +24,17 @@ public class UserService {
 		user.upgradeLevel();
 		userDao.update(user);
 	}
+	
+	public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
+	public static final int MIN_RECOMEND_FOR_GOLD = 30;
 
 	private boolean canUpgradeLevel(User user) {
 		Level currentLevel = user.getLevel();
 		switch (currentLevel) {
 			case BASIC:
-				return (user.getLogin() >= 50);
+				return (user.getLogin() >= MIN_LOGCOUNT_FOR_SILVER);
 			case SILVER:
-				return (user.getRecommend() >= 30);
+				return (user.getRecommend() >= MIN_RECOMEND_FOR_GOLD);
 			case GOLD:
 				return false;
 			default:
