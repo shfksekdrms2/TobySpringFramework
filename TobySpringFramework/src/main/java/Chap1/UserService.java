@@ -1,22 +1,48 @@
 package Chap1;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import Chap1.User.Level;
 
 public class UserService {
 	UserDao userDao;
+	private DataSource dataSource;
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
 
-	public void upgradeLevels() {
-		List<User> users = userDao.getAll();
-		for (User user : users) {
-			if (canUpgradeLevel(user)) {
-				upgradeLevel(user);
+	public void upgradeLevels() throws SQLException {
+		TransactionSynchronizationManager.initSynchronization();
+		Connection c = DataSourceUtils.getConnection(dataSource);
+		c.setAutoCommit(false);
+
+		try {
+			List<User> users = userDao.getAll();
+			for (User user : users) {
+				if (canUpgradeLevel(user)) {
+					upgradeLevel(user);
+				}
 			}
+			c.commit();
+		} catch (Exception e) {
+			c.rollback();
+			throw e;
+		} finally {
+			DataSourceUtils.releaseConnection(c, dataSource);
+			TransactionSynchronizationManager.unbindResource(this.dataSource);
+			TransactionSynchronizationManager.clearSynchronization();
 		}
 	}
 
@@ -24,7 +50,7 @@ public class UserService {
 		user.upgradeLevel();
 		userDao.update(user);
 	}
-	
+
 	public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
 	public static final int MIN_RECOMEND_FOR_GOLD = 30;
 
