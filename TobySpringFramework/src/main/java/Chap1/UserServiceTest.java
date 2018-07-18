@@ -3,8 +3,11 @@ package Chap1;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,17 +17,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
 
 import Chap1.User.Level;
-
 import static Chap1.UserService.MIN_LOGCOUNT_FOR_SILVER;
 import static Chap1.UserService.MIN_RECOMEND_FOR_GOLD;
-
-;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserServiceTest {
 	@Autowired
 	UserService userService;
+	@Autowired
+	DataSource datraSource;
 	@Autowired
 	UserDao userDao;
 	List<User> users;
@@ -39,7 +41,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void upgradeLevels() {
+	public void upgradeLevels() throws SQLException {
 		userDao.deleteAll();
 		for (User user : users) {
 			userDao.add(user);
@@ -80,9 +82,10 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void upgradeAllOrNothing() {
+	public void upgradeAllOrNothing() throws SQLException {
 		UserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
+		testUserService.setDataSource(this.datraSource);
 		userDao.deleteAll();
 		for (User user : users)
 			userDao.add(user);
