@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import Chap1.User.Level;
 import static Chap1.UserService.MIN_LOGCOUNT_FOR_SILVER;
@@ -26,7 +27,7 @@ public class UserServiceTest {
 	@Autowired
 	UserService userService;
 	@Autowired
-	DataSource datraSource;
+	PlatformTransactionManager transactionManager;
 	@Autowired
 	UserDao userDao;
 	List<User> users;
@@ -85,7 +86,7 @@ public class UserServiceTest {
 	public void upgradeAllOrNothing() throws SQLException {
 		UserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
-		testUserService.setDataSource(this.datraSource);
+		testUserService.setTransactionManager(transactionManager);
 		userDao.deleteAll();
 		for (User user : users)
 			userDao.add(user);
