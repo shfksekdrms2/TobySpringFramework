@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -54,12 +56,16 @@ public class UserService {
 
 	private void sendUpgradeEmail(User user) {
 		Properties props = new Properties();
-		props.put("mail.smtp.host", "mail.ksug.org");
-		Session s = Session.getInstance(props, null);
+		props.put("mail.smtp.starttls.enable",  "true");
+		props.put("mail.smtp.host", "smtp.naver.com");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "587");
+		Authenticator auth = new myAuthentication();
+		Session s = Session.getDefaultInstance(props, auth);
 
 		MimeMessage message = new MimeMessage(s);
 		try {
-			message.setFrom(new InternetAddress("useradmin@ksug.org"));
+			message.setFrom(new InternetAddress("sender<wjdtjdwlsqkq@naver.com>"));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
 			message.setSubject("Upgrade 안내");
 			message.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드되었습니다.");
@@ -93,5 +99,17 @@ public class UserService {
 			user.setLevel(Level.BASIC);
 		}
 		userDao.add(user);
+	}
+}
+
+class myAuthentication extends Authenticator {
+	PasswordAuthentication auth;
+
+	public myAuthentication() {
+		auth = new PasswordAuthentication("id", "password");
+	}
+
+	public PasswordAuthentication getPasswordAuthentication() {
+		return auth;
 	}
 }
