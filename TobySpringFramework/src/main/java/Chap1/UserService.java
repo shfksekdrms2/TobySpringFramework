@@ -6,7 +6,6 @@ import java.util.List;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -16,9 +15,9 @@ import Chap1.User.Level;
 public class UserService {
 	UserDao userDao;
 	private PlatformTransactionManager transactionManager;
-	private MailSender mailSender;
+	private org.springframework.mail.MailSender mailSender;
 
-	public void setMailSender(MailSender mailSender) {
+	public void setMailSender(org.springframework.mail.MailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 

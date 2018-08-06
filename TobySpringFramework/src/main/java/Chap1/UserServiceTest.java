@@ -32,7 +32,7 @@ public class UserServiceTest {
 	UserDao userDao;
 	List<User> users;
 	@Autowired
-	MailSender mailSender;
+	org.springframework.mail.MailSender mailSender;
 
 	@Before
 	public void setUp() {
