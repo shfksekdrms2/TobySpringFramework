@@ -16,6 +16,11 @@ import Chap1.User.Level;
 public class UserService {
 	UserDao userDao;
 	private PlatformTransactionManager transactionManager;
+	private MailSender mailSender;
+
+	public void setMailSender(MailSender mailSender) {
+		this.mailSender = mailSender;
+	}
 
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
@@ -48,16 +53,13 @@ public class UserService {
 	}
 
 	private void sendUpgradeEMail(User user) {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("mail.server.com");
-
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(user.getEmail());
 		mailMessage.setFrom("wjdtjdwlsqkq@naver.com");
 		mailMessage.setSubject("Upgrade 안내");
 		mailMessage.setText("사용자님의 등급이 " + user.getLevel().name());
 
-		mailSender.send(mailMessage);
+		this.mailSender.send(mailMessage);
 	}
 
 	public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
